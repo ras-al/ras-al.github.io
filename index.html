@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rasal Musthafa</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b0c0e;
+            --surface: #111316;
+            --border: rgba(255, 255, 255, 0.07);
+            --text: #e8e6df;
+            --muted: #6b6a65;
+            --accent: #c8f04d;
+            --accent2: #4df0c8;
+            --glow: rgba(200, 240, 77, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom cursor */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.08s ease, width 0.2s, height 0.2s, background 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hovering {
+            width: 30px;
+            height: 30px;
+            background: var(--accent2);
+        }
+
+        /* Noise overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.5;
+        }
+
+        /* Grid lines background */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* LAYOUT */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--border);
+            background: rgba(11, 12, 14, 0.85);
+            backdrop-filter: blur(16px);
+        }
+
+        nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav-tag {
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 0 4rem;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-left {
+            position: relative;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 32px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            line-height: 1.0;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-desc {
+            font-size: 0.82rem;
+            line-height: 1.9;
+            color: var(--muted);
+            max-width: 420px;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid;
+            transition: all 0.25s ease;
+            cursor: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0b0c0e;
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--accent);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--accent2);
+            color: var(--accent2);
+            box-shadow: 0 0 20px rgba(77, 240, 200, 0.1);
+        }
+
+        /* HERO RIGHT — decorative card */
+        .hero-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-card {
+            position: relative;
+            width: 320px;
+            height: 380px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, var(--accent), transparent 50%, var(--accent2));
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .profile-initials {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #0b0c0e;
+            letter-spacing: 0.05em;
+        }
+
+        .profile-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .profile-role {
+            font-size: 0.68rem;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .profile-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.68rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        /* Corner decorations on card */
+        .card-corner {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: var(--accent);
+            border-style: solid;
+        }
+
+        .card-corner.tl {
+            top: 10px;
+            left: 10px;
+            border-width: 1px 0 0 1px;
+        }
+
+        .card-corner.tr {
+            top: 10px;
+            right: 10px;
+            border-width: 1px 1px 0 0;
+        }
+
+        .card-corner.bl {
+            bottom: 10px;
+            left: 10px;
+            border-width: 0 0 1px 1px;
+        }
+
+        .card-corner.br {
+            bottom: 10px;
+            right: 10px;
+            border-width: 0 1px 1px 0;
+        }
+
+        /* LINKS SECTION */
+        .links-section {
+            padding: 5rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1px;
+            border: 1px solid var(--border);
+            background: var(--border);
+        }
+
+        .link-card {
+            background: var(--bg);
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: background 0.2s ease;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .link-card:hover {
+            background: var(--surface);
+        }
+
+        .link-card:hover::after {
+            width: 100%;
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .link-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent);
+        }
+
+        .link-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+        }
+
+        .link-handle {
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+
+        .link-arrow {
+            margin-top: auto;
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-transform: uppercase;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        footer .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copy {
+            font-size: 0.68rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+
+        .footer-tag {
+            font-size: 0.68rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+
+        .footer-tag span {
+            color: var(--accent);
+        }
+
+        /* ANIMATIONS */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.25s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.55s;
+        }
+
+        .delay-5 {
+            animation-delay: 0.7s;
+        }
+
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-right {
+                order: -1;
+            }
+
+            .profile-card {
+                width: 260px;
+                height: 300px;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor" id="cursor"></div>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="nav-logo">RM</a>
+            <span class="nav-tag">Portfolio — 2026</span>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-left">
+                        <p class="hero-eyebrow fade-up delay-1">Available for opportunities</p>
+                        <h1 class="fade-up delay-2">Rasal<br /><em>Musthafa</em></h1>
+                        <p class="hero-desc fade-up delay-3">
+                            Computer Science Engineering student — building production-grade systems in full-stack, AI,
+                            and robotics. More coming soon.
+                        </p>
+                        <div class="hero-actions fade-up delay-4">
+                            <a href="https://drive.google.com/file/d/13nF2P2kwypAU11sTXLoHDcpXg0z8aYRA/view?usp=drive_link"
+                                target="_blank" class="btn btn-primary">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Resume
+                            </a>
+                            <a href="https://github.com/ras-al" target="_blank" rel="noopener"
+                                class="btn btn-ghost">GitHub ↗</a>
+                            <a href="https://linkedin.com/in/rasalmusthafa" target="_blank" rel="noopener"
+                                class="btn btn-ghost">LinkedIn ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="hero-right fade-up delay-5">
+                        <div class="profile-card">
+                            <div class="card-corner tl"></div>
+                            <div class="card-corner tr"></div>
+                            <div class="card-corner bl"></div>
+                            <div class="card-corner br"></div>
+                            <div class="profile-initials">RM</div>
+                            <div>
+                                <div class="profile-name">Rasal Musthafa</div>
+                                <div class="profile-role" style="margin-top:0.4rem;">Full-Stack · AI · Robotics</div>
+                            </div>
+                            <div class="profile-status">
+                                <div class="status-dot"></div>
+                                Open to work
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="links-section">
+            <div class="container">
+                <p class="section-label">Find me on</p>
+                <div class="links-grid">
+
+                    <a href="https://github.com/ras-al" target="_blank" rel="noopener" class="link-card">
+                        <div class="link-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                            </svg>
+                        </div>
+                        <div class="link-title">GitHub</div>
+                        <div class="link-handle">github.com/ras-al</div>
+                        <div class="link-arrow">View profile →</div>
+                    </a>
+
+                    <a href="https://linkedin.com/in/rasalmusthafa" target="_blank" rel="noopener" class="link-card">
+                        <div class="link-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </div>
+                        <div class="link-title">LinkedIn</div>
+                        <div class="link-handle">linkedin.com/in/rasalmusthafa</div>
+                        <div class="link-arrow">Connect →</div>
+                    </a>
+
+                    <a href="Rasal_Musthafa_Resume.pdf" download class="link-card">
+                        <div class="link-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none"
+                                    stroke-width="1.5" style="fill:none;stroke:currentColor" />
+                                <polyline points="14 2 14 8 20 8" fill="none" stroke-width="1.5"
+                                    style="fill:none;stroke:currentColor" />
+                                <line x1="12" y1="18" x2="12" y2="12" stroke-width="1.5" style="stroke:currentColor" />
+                                <polyline points="9 15 12 18 15 15" stroke-width="1.5"
+                                    style="fill:none;stroke:currentColor" />
+                            </svg>
+                        </div>
+                        <div class="link-title">Resume</div>
+                        <div class="link-handle">Rasal_Musthafa_Resume.pdf</div>
+                        <div class="link-arrow">Download →</div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <span class="footer-copy">© 2026 Rasal Musthafa</span>
+            <span class="footer-tag">Temporary Website, Will Replace Soon.</span>
+        </div>
+    </footer>
+
+    <script>
+        // Custom cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+    </script>
+</body>
+
+</html>
