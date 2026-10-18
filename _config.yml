@@ -1,0 +1,9 @@
+# Jekyll configuration to exclude non-site folders if Jekyll ever runs
+exclude:
+  - reactbits-prompts
+  - src
+  - public
+  - node_modules
+  - package.json
+  - package-lock.json
+  - vite.config.js
