@@ -87,58 +87,36 @@ export default function Navigation({ activeSection, onNavigate, onReplayIntro })
 
   return (
     <>
-      {/* Mobile Sticky Desktop-Style Header */}
-      <header className="lg:hidden sticky top-0 left-0 right-0 z-40 bg-[var(--px-panel)] border-b-2 border-[var(--px-line)] px-3 py-2 flex items-center justify-between pixel-shadow-sm select-none">
-        <div className="flex items-center gap-2.5">
-          <PixelSprite name="robot" scale={1.5} />
+      {/* Mobile Sticky Top Bar */}
+      <header className="lg:hidden sticky top-0 left-0 right-0 z-40 bg-[var(--px-bg)] border-b-4 border-[var(--px-line)] px-4 py-3 flex items-center justify-between pixel-shadow-sm select-none">
+        <div className="flex items-center gap-3">
+          <PixelSprite name="robot" scale={2} />
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-['Press_Start_2P'] text-[10px] text-[var(--px-ink)]">
-                RASAL M.
-              </span>
-              <span className="font-['Silkscreen'] text-[8px] text-[var(--px-mint)] font-bold px-1 bg-[var(--px-panel-2)] border border-[var(--px-line)]">
-                PLAYER 01
-              </span>
-            </div>
-            <div className="text-[9px] font-['VT323'] text-[var(--px-muted)] flex items-center gap-2 mt-0.5">
-              <span>LVL: 2024-28</span>
-              <span className="text-[var(--px-gold)] font-bold">CGPA 9.48</span>
-            </div>
+            <span className="font-['Press_Start_2P'] text-xs text-[var(--px-ink)] block">
+              RASAL.DEV
+            </span>
+            <span className="font-['Silkscreen'] text-[10px] text-[var(--px-mint)] tracking-wider block">
+              B.TECH CSE
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <PixelButton
-            size="sm"
-            variant={mobileOpen ? 'mint' : 'secondary'}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            ariaLabel={mobileOpen ? 'Close System Tree' : 'Open System Tree'}
-            className="text-[8px] font-['Press_Start_2P'] px-2 py-1"
-          >
-            {mobileOpen ? 'TREE ▲' : 'TREE ▼'}
-          </PixelButton>
-
-          {onReplayIntro && (
-            <button
-              type="button"
-              onClick={onReplayIntro}
-              className="text-[var(--px-gold)] hover:text-[var(--px-mint)] text-[9px] font-['Silkscreen'] px-1.5 py-1 border border-[var(--px-line)] bg-[var(--px-panel-2)] cursor-pointer pixel-corners-sm select-none"
-              title="Replay intro boot sequence"
-            >
-              REBOOT
-            </button>
-          )}
-        </div>
+        <PixelButton
+          size="sm"
+          variant="secondary"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          ariaLabel={mobileOpen ? 'Close Menu' : 'Open Menu'}
+          icon={<PixelSprite name={mobileOpen ? 'close' : 'menu'} scale={1.5} />}
+        >
+          {mobileOpen ? 'CLOSE' : 'MENU'}
+        </PixelButton>
       </header>
 
       {/* Mobile Sub-Header Directory Bar: Horizontally scrollable, always open & visible */}
       <nav
         aria-label="Mobile Directory Navigation"
-        className="lg:hidden sticky top-[53px] z-30 bg-[var(--px-bg)]/98 border-b-2 border-[var(--px-line)] px-2 py-1.5 flex items-center gap-1.5 overflow-x-auto select-none no-scrollbar"
+        className="lg:hidden sticky top-[57px] z-30 bg-[var(--px-bg)]/95 border-b-2 border-[var(--px-line)] px-2 py-1.5 flex items-center gap-1.5 overflow-x-auto select-none no-scrollbar"
       >
-        <span className="font-['Press_Start_2P'] text-[8px] text-[var(--px-gold)] flex-none pl-1 pr-1">
-          DIR:
-        </span>
         {menuItems
           .flatMap(cat => (cat.children ? cat.children : [cat]))
           .map(item => {
@@ -148,109 +126,83 @@ export default function Navigation({ activeSection, onNavigate, onReplayIntro })
                 key={item.value}
                 type="button"
                 onClick={() => handleSelect(item.value)}
-                className={`flex items-center gap-1.5 px-2.5 py-1 text-[8px] font-['Press_Start_2P'] border whitespace-nowrap cursor-pointer transition-none ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-['Press_Start_2P'] border whitespace-nowrap cursor-pointer transition-none ${
                   isActive
                     ? 'bg-[var(--px-mint)] text-black border-[var(--px-mint)] font-bold'
                     : 'bg-[var(--px-panel)] text-[var(--px-muted)] border-[var(--px-line)] hover:text-[var(--px-ink)] hover:border-[var(--px-mint)]'
                 } pixel-corners-sm`}
               >
-                <span>{item.label.toUpperCase()}</span>
+                <span>{item.label}</span>
               </button>
             );
           })}
       </nav>
 
-      {/* Mobile Drawer Overlay: Exact Desktop NAV_SYSTEM.SYS Window */}
+      {/* Mobile Drawer Overlay */}
       {mobileOpen && (
         <div
           role="dialog"
           aria-modal="true"
-          className="lg:hidden fixed inset-0 z-50 bg-black/85 p-4 flex flex-col items-center justify-center overflow-y-auto"
-          onClick={() => setMobileOpen(false)}
+          className="lg:hidden fixed inset-0 z-50 bg-[var(--px-bg)]/98 p-6 flex flex-col justify-between overflow-y-auto"
         >
-          <div
-            className="w-full max-w-sm"
-            onClick={e => e.stopPropagation()}
-          >
-            <PixelBox
-              variant="panel"
-              title="NAV_SYSTEM.SYS"
-              className="w-full flex flex-col pixel-shadow-lg"
-              bodyClassName="p-3 flex flex-col gap-2.5 bg-[var(--px-panel)]"
-            >
-              {/* Header / Identity Card */}
-              <div className="p-2.5 bg-[var(--px-panel-2)] border-2 border-[var(--px-line)] pixel-corners-sm">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-2.5">
-                    <PixelSprite name="robot" scale={1.5} />
-                    <div className="min-w-0">
-                      <h1 className="font-['Press_Start_2P'] text-[11px] text-[var(--px-ink)] tracking-wider">
-                        RASAL M.
-                      </h1>
-                      <span className="font-['Silkscreen'] text-[9px] text-[var(--px-mint)] font-bold">
-                        PLAYER 01
-                      </span>
-                    </div>
-                  </div>
-                  <PixelButton
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => setMobileOpen(false)}
-                    ariaLabel="Close"
-                    icon={<PixelSprite name="close" scale={1.2} />}
-                  >
-                    CLOSE
-                  </PixelButton>
-                </div>
-                <div className="mt-1.5 text-xs font-['VT323'] text-[var(--px-muted)] border-t border-[var(--px-line)] pt-1.5 flex justify-between">
-                  <span>LVL: B.TECH 2024-28</span>
-                  <span className="text-[var(--px-gold)] font-bold">CGPA 9.48 / 10</span>
-                </div>
+          <div>
+            <div className="flex items-center justify-between pb-4 mb-6 border-b-4 border-[var(--px-line)]">
+              <div className="flex items-center gap-3">
+                <PixelSprite name="robot" scale={2} />
+                <span className="font-['Press_Start_2P'] text-sm text-[var(--px-ink)]">
+                  SYSTEM NAV
+                </span>
               </div>
+              <PixelButton
+                size="sm"
+                variant="secondary"
+                onClick={() => setMobileOpen(false)}
+                ariaLabel="Close Menu"
+                icon={<PixelSprite name="close" scale={1.5} />}
+              >
+                CLOSE
+              </PixelButton>
+            </div>
 
-              {/* Tree Menu with all branches always open */}
-              <div className="w-full flex justify-center py-1">
-                <BranchedMenu
-                  items={menuItems}
-                  active={activeSection}
-                  defaultOpen={[0, 1, 2, 3]}
-                  alwaysOpen={true}
-                  onSelect={handleSelect}
-                  color="#f4efe6"
-                  accentColor="#5cffc8"
-                  lineColor="#3b2f66"
-                  radius={0}
-                  lineWidth={2}
-                  rowHeight={34}
-                  indent={36}
-                  fontSize={12}
-                  width={240}
-                  drawDuration={260}
-                  foldDuration={200}
-                  className="font-['Silkscreen']"
-                />
-              </div>
+            <div className="flex justify-center py-2">
+              <BranchedMenu
+                items={menuItems}
+                active={activeSection}
+                defaultOpen={[0, 1, 2, 3]}
+                alwaysOpen={true}
+                onSelect={handleSelect}
+                color="#f4efe6"
+                accentColor="#5cffc8"
+                lineColor="#3b2f66"
+                radius={0}
+                lineWidth={3}
+                rowHeight={38}
+                indent={40}
+                fontSize={13}
+                width={250}
+                drawDuration={300}
+                foldDuration={240}
+                className="font-['Silkscreen']"
+              />
+            </div>
+          </div>
 
-              {/* Quick Status Badge & Reboot Action */}
-              <div className="pt-2 border-t-2 border-[var(--px-line)] flex items-center justify-between text-[10px] font-['Silkscreen'] px-1">
-                <div className="flex items-center gap-1.5 text-[var(--px-mint)]">
-                  <span className="w-1.5 h-1.5 bg-[var(--px-mint)] pixel-blink inline-block" />
-                  <span>SYSTEM READY // ALL DIRECTORIES MOUNTED</span>
-                </div>
-                {onReplayIntro && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileOpen(false);
-                      onReplayIntro();
-                    }}
-                    className="text-[var(--px-gold)] hover:text-[var(--px-mint)] px-2 py-0.5 border border-[var(--px-line)] bg-[var(--px-panel-2)] cursor-pointer text-[9px]"
-                  >
-                    REBOOT
-                  </button>
-                )}
-              </div>
-            </PixelBox>
+          <div className="pt-4 border-t-4 border-[var(--px-line)] flex items-center justify-between px-2">
+            <span className="font-['VT323'] text-lg text-[var(--px-muted)]">
+              Rasal Musthafa &copy; 2026
+            </span>
+            {onReplayIntro && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onReplayIntro();
+                }}
+                className="font-['Silkscreen'] text-xs text-[var(--px-gold)] hover:text-[var(--px-mint)] underline cursor-pointer"
+              >
+                [REPLAY INTRO]
+              </button>
+            )}
           </div>
         </div>
       )}
