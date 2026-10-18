@@ -30,11 +30,11 @@ export default function PixelBox({
 
   return (
     <div
-      className={`relative border-4 ${borderColor} ${bgClasses} ${shadowClass} pixel-corners flex flex-col ${className}`}
+      className={`relative border-[length:var(--px)] ${borderColor} ${bgClasses} ${shadowClass} pixel-corners flex flex-col ${className}`}
     >
       {/* Retro Window Title Bar if title provided */}
       {title && (
-        <div className="flex items-center justify-between border-b-4 border-[var(--px-line)] bg-[var(--px-panel-2)] px-3 py-2 select-none">
+        <div className="flex items-center justify-between border-b-[length:var(--px)] border-[var(--px-line)] bg-[var(--px-panel-2)] px-2.5 xs:px-3 py-1.5 xs:py-2 select-none">
           <div className="flex items-center gap-2 overflow-hidden">
             {icon && <span className="flex-none">{icon}</span>}
             <span className="font-['Silkscreen'] text-xs uppercase tracking-wider text-[var(--px-ink)] truncate font-bold">

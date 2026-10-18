@@ -3,10 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 export default function LazyMount({
   children,
   placeholder = null,
-  rootMargin = '200px',
-  unmountOnExit = false,
+  rootMargin = '150px',
+  unmountOnExit = undefined,
   minHeight = '200px',
   className = '',
+  style = {},
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
@@ -14,14 +15,19 @@ export default function LazyMount({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // On touch devices or small screens, aggressively unmount off-screen surfaces to protect WebGL contexts
+    const isTouch = typeof window !== 'undefined' && 
+      (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024);
+    const shouldUnmountOnExit = unmountOnExit !== undefined ? unmountOnExit : isTouch;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (!unmountOnExit) {
+          if (!shouldUnmountOnExit) {
             observer.disconnect();
           }
-        } else if (unmountOnExit) {
+        } else if (shouldUnmountOnExit) {
           setIsVisible(false);
         }
       },
@@ -35,7 +41,7 @@ export default function LazyMount({
   return (
     <div
       ref={containerRef}
-      style={{ minHeight: isVisible ? 'auto' : minHeight }}
+      style={{ minHeight: isVisible ? 'auto' : minHeight, ...style }}
       className={`relative ${className}`}
     >
       {isVisible ? (
@@ -44,11 +50,11 @@ export default function LazyMount({
         placeholder || (
           <div
             style={{ minHeight }}
-            className="w-full h-full flex flex-col items-center justify-center border-4 border-dashed border-[var(--px-line)] bg-[var(--px-panel)]/50 p-6 select-none"
+            className="w-full h-full min-h-[200px] flex flex-col items-center justify-center border-4 border-[var(--px-line)] bg-[var(--px-panel)] p-6 select-none pixel-corners"
           >
-            <div className="w-8 h-8 border-4 border-[var(--px-mint)] animate-pulse mb-3" />
-            <span className="font-['Silkscreen'] text-xs text-[var(--px-muted)] uppercase tracking-wider">
-              [ LOADING ARTIFACT... ]
+            <div className="w-6 h-6 border-2 border-[var(--px-mint)] animate-pulse mb-2" />
+            <span className="font-['Silkscreen'] text-[10px] text-[var(--px-muted)] uppercase tracking-wider">
+              [ STANDBY // PIXEL SKELETON ]
             </span>
           </div>
         )

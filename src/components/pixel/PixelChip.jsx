@@ -21,7 +21,7 @@ export default function PixelChip({
   }[variant] || 'bg-[var(--px-panel-2)] text-[var(--px-ink)] border-[var(--px-line)]';
 
   const sizeStyles = {
-    sm: 'text-[10px] px-2 py-0.5 border-2',
+    sm: 'text-[11px] px-2 py-0.5 border-2',
     md: 'text-xs px-2.5 py-1 border-2',
   }[size] || 'text-xs px-2.5 py-1 border-2';
 

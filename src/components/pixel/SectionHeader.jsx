@@ -24,7 +24,7 @@ export default function SectionHeader({
       </div>
 
       {/* Main Title */}
-      <h2 className="font-['Press_Start_2P'] text-base sm:text-xl md:text-2xl lg:text-3xl text-[var(--px-ink)] leading-snug tracking-tight uppercase">
+      <h2 className="font-['Press_Start_2P'] text-base sm:text-xl md:text-2xl lg:text-3xl text-[var(--px-ink)] leading-relaxed tracking-tight uppercase break-words">
         {title}
       </h2>
 
