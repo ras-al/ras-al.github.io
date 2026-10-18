@@ -4,24 +4,85 @@
 class RetroAudio {
   constructor() {
     this.ctx = null;
-    this.muted = false;
+    this.listeners = new Set();
+
+    // Determine initial muted state:
+    // On mobile / touch devices, default to MUTED until user toggles sound ON
+    // Persist in localStorage with try/catch
+    const isTouch = typeof window !== 'undefined' && 
+      (window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 1024);
+
+    let saved = null;
+    try {
+      saved = localStorage.getItem('pixel_portfolio_sound_enabled');
+    } catch {
+      // Ignore storage error
+    }
+
+    if (saved !== null) {
+      this.muted = saved !== 'true';
+    } else {
+      this.muted = isTouch; // Default off on mobile, on on desktop
+    }
   }
 
   init() {
-    if (!this.ctx && typeof window !== 'undefined') {
+    if (typeof window === 'undefined') return;
+
+    if (!this.ctx) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
+
+        // Handle iOS interrupted and state change
+        this.ctx.onstatechange = () => {
+          if (this.ctx && this.ctx.state === 'interrupted') {
+            this.ctx.resume().catch(() => {});
+          }
+        };
       }
     }
+
     if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume().catch(() => {});
     }
   }
 
+  subscribe(listener) {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  notify() {
+    this.listeners.forEach((fn) => fn(!this.muted));
+  }
+
   toggleMute() {
     this.muted = !this.muted;
+    try {
+      localStorage.setItem('pixel_portfolio_sound_enabled', (!this.muted).toString());
+    } catch {
+      // Ignore storage error
+    }
+    if (!this.muted) {
+      this.init();
+      this.play('blip');
+    }
+    this.notify();
     return this.muted;
+  }
+
+  setMuted(muted) {
+    this.muted = Boolean(muted);
+    try {
+      localStorage.setItem('pixel_portfolio_sound_enabled', (!this.muted).toString());
+    } catch {
+      // Ignore
+    }
+    if (!this.muted) {
+      this.init();
+    }
+    this.notify();
   }
 
   isMuted() {
@@ -92,6 +153,33 @@ class RetroAudio {
         noise.connect(gain);
         gain.connect(ctx.destination);
         noise.start(now);
+      } else if (type === 'purr') {
+        // 8-bit cat purr sound (frequency-modulated low warm buzz)
+        const osc = ctx.createOscillator();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        const gain = ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(130, now);
+
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(26, now); // 26Hz purr vibration
+        lfoGain.gain.setValueAtTime(45, now);
+
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+
+        gain.gain.setValueAtTime(0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        lfo.start(now);
+        osc.start(now);
+        lfo.stop(now + 0.72);
+        osc.stop(now + 0.72);
       } else if (type === 'gameover') {
         // Descending low notes
         const notes = [440, 392, 349, 261];

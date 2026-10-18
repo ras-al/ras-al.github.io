@@ -13,6 +13,7 @@ import Contact from './components/sections/Contact';
 import ArcadeGame from './components/sections/ArcadeGame';
 import Footer from './components/sections/Footer';
 import PixelCompanion from './components/pixel/PixelCompanion';
+import { useQuality } from './utils/quality';
 
 const SECTIONS = [
   'hero',
@@ -28,9 +29,15 @@ const SECTIONS = [
 ];
 
 export default function App() {
+  const quality = useQuality();
   const [activeSection, setActiveSection] = useState('hero');
   const [bootDone, setBootDone] = useState(false);
   const [showBoot, setShowBoot] = useState(true);
+
+  // Sync performance tier attribute to root for CSS conditionals
+  useEffect(() => {
+    document.documentElement.setAttribute('data-quality', quality);
+  }, [quality]);
 
   // Clear legacy sessionStorage flag if any
   useEffect(() => {
@@ -82,7 +89,7 @@ export default function App() {
 
     setActiveSection(sectionId);
 
-    const offset = window.innerWidth >= 1024 ? 24 : 92; // Desktop vs mobile sticky header offset
+    const offset = window.innerWidth >= 1024 ? 24 : 64; // Desktop vs mobile sticky top bar offset
     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
     const offsetPosition = elementPosition - offset;
 
@@ -104,7 +111,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--px-bg)] text-[var(--px-ink)] relative selection:bg-[var(--px-mint)] selection:text-[var(--px-bg)]">
+    <div className="min-h-svh bg-[var(--px-bg)] text-[var(--px-ink)] relative selection:bg-[var(--px-mint)] selection:text-[var(--px-bg)]">
       {/* Accessible Skip Link */}
       <SkipToContent />
 
@@ -114,7 +121,7 @@ export default function App() {
       {/* Boot Screen Terminal Overlay */}
       {showBoot && <BootScreen onComplete={handleBootComplete} />}
 
-      {/* Navigation: Desktop Left Rail & Mobile Top Window + Sticky Bar */}
+      {/* Navigation: Desktop Left Rail & Mobile Top Bar + Stepped Drawer */}
       <Navigation
         activeSection={activeSection}
         onNavigate={handleNavigate}
@@ -123,7 +130,7 @@ export default function App() {
 
       {/* Main Content Column */}
       <div className="lg:pl-60 pl-0">
-        <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-2 sm:py-4">
+        <main id="main-content" className="max-w-5xl mx-auto px-3 xs:px-4 sm:px-6 md:px-8 py-2 sm:py-4 safe-pb">
           <Hero onNavigate={handleNavigate} bootDone={bootDone} />
           <About />
           <Experience />

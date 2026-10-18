@@ -156,13 +156,13 @@ export const SPRITES = {
   ],
   heart: [
     ".DD..DD.",
-    "DRRDD RRD",
-    "DRRRRRRRD",
-    "DRRRRRRRD",
-    ".DRRRRRD.",
-    "..DRRRD..",
-    "...DRD...",
-    "....D...."
+    "DRRDDRRD",
+    "DRRRRRRD",
+    "DRRRRRRD",
+    ".DRRRRD.",
+    "..DRRD..",
+    "...DD...",
+    "....D..."
   ],
   trophy: [
     ".DDDDDDDD.",
@@ -240,6 +240,14 @@ export const SPRITES = {
     "DDDD..D.",
     "..DD.D..",
     "...D...."
+  ],
+  'speaker-mute': [
+    "...D...D",
+    "..DD..D.",
+    "DDDD.D..",
+    "DDDD..D.",
+    "..DD...D",
+    "...D..D."
   ]
 };
 

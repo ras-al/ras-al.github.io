@@ -16,6 +16,8 @@
   --font-pixel-heading: 'Press Start 2P', monospace;
   --font-pixel-sub: 'Silkscreen', monospace;
   --font-pixel-body: 'VT323', monospace;
+
+  --breakpoint-xs: 24rem;
 }
 
 :root {
@@ -30,21 +32,47 @@
   --px-mint: #5cffc8;
   --px-gold: #ffd36e;
   --px-red: #ff4f6d;
+
+  /* Base pixel scale token: 4px desktop, 3px tablet, 2px mobile */
+  --px: 4px;
+
+  /* Safe areas */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --px: 3px;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --px: 2px;
+  }
 }
 
 /* Base resets & pixel rendering */
 * {
   box-sizing: border-box;
   border-radius: 0 !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html {
+html, body {
   background-color: var(--px-bg);
   color: var(--px-ink);
   font-family: 'VT323', monospace;
   font-size: 20px;
   line-height: 1.35;
   scroll-behavior: smooth;
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -53,12 +81,27 @@ html {
   }
 }
 
+h1, h2, h3 {
+  overflow-wrap: anywhere;
+  hyphens: manual;
+}
+
 img, canvas, svg {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
 
-/* Custom Pixel Cursor for Desktop */
+/* Buttons and interaction rules */
+button, [role="button"], a {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 3px solid var(--px-mint) !important;
+  outline-offset: 2px !important;
+}
+
+/* Custom Pixel Cursor for Desktop Fine Pointers Only */
 @media (hover: hover) and (pointer: fine) {
   body, button, a, [role="button"], input, select, textarea {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' shape-rendering='crispEdges'%3E%3Cpath fill='%23000000' d='M0 0h2v14h4v-2h2v-2h2v-2h2V6h2V4h2V0z'/%3E%3Cpath fill='%235cffc8' d='M2 2h2v10h2v-2h2v-2h2V6h2V4h2V2z'/%3E%3C/svg%3E"), auto !important;
@@ -68,29 +111,50 @@ img, canvas, svg {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body, button, a, [role="button"] {
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  body, button, a, [role="button"], input, select, textarea {
     cursor: auto !important;
   }
 }
 
-/* Scanlines overlay */
+/* Safe Area Classes */
+.safe-pt {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+}
+.safe-pb {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+}
+.safe-pl {
+  padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+}
+.safe-pr {
+  padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+}
+
+/* Scanlines overlay: static, performant, disabled at low quality */
 .scanlines-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 999;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0) 50%,
-    rgba(0, 0, 0, 0.25) 50%
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.22) 2px,
+    rgba(0, 0, 0, 0.22) 4px
   );
-  background-size: 100% 4px;
-  opacity: 0.85;
-  transform: translateZ(0);
-  will-change: transform;
+  opacity: 0.45;
   contain: strict;
 }
 
+@media (min-width: 768px) {
+  .scanlines-overlay {
+    opacity: 0.75;
+  }
+}
+
+html[data-quality="low"] .scanlines-overlay,
 @media (prefers-reduced-motion: reduce) {
   .scanlines-overlay {
     display: none;
@@ -99,8 +163,8 @@ img, canvas, svg {
 
 /* Custom retro pixel scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: #000000;
@@ -115,56 +179,56 @@ img, canvas, svg {
   background: var(--px-accent);
 }
 
-/* Notched corners clip-path */
+/* Notched corners clip-path derived from --px */
 .pixel-corners {
   clip-path: polygon(
-    0 4px,
-    4px 4px,
-    4px 0,
-    calc(100% - 4px) 0,
-    calc(100% - 4px) 4px,
-    100% 4px,
-    100% calc(100% - 4px),
-    calc(100% - 4px) calc(100% - 4px),
-    calc(100% - 4px) 100%,
-    4px 100%,
-    4px calc(100% - 4px),
-    0 calc(100% - 4px)
+    0 var(--px),
+    var(--px) var(--px),
+    var(--px) 0,
+    calc(100% - var(--px)) 0,
+    calc(100% - var(--px)) var(--px),
+    100% var(--px),
+    100% calc(100% - var(--px)),
+    calc(100% - var(--px)) calc(100% - var(--px)),
+    calc(100% - var(--px)) 100%,
+    var(--px) 100%,
+    var(--px) calc(100% - var(--px)),
+    0 calc(100% - var(--px))
   );
 }
 
 .pixel-corners-sm {
   clip-path: polygon(
-    0 2px,
-    2px 2px,
-    2px 0,
-    calc(100% - 2px) 0,
-    calc(100% - 2px) 2px,
-    100% 2px,
-    100% calc(100% - 2px),
-    calc(100% - 2px) calc(100% - 2px),
-    calc(100% - 2px) 100%,
-    2px 100%,
-    2px calc(100% - 2px),
-    0 calc(100% - 2px)
+    0 calc(var(--px) * 0.5),
+    calc(var(--px) * 0.5) calc(var(--px) * 0.5),
+    calc(var(--px) * 0.5) 0,
+    calc(100% - calc(var(--px) * 0.5)) 0,
+    calc(100% - calc(var(--px) * 0.5)) calc(var(--px) * 0.5),
+    100% calc(var(--px) * 0.5),
+    100% calc(100% - calc(var(--px) * 0.5)),
+    calc(100% - calc(var(--px) * 0.5)) calc(100% - calc(var(--px) * 0.5)),
+    calc(100% - calc(var(--px) * 0.5)) 100%,
+    calc(var(--px) * 0.5) 100%,
+    calc(var(--px) * 0.5) calc(100% - calc(var(--px) * 0.5)),
+    0 calc(100% - calc(var(--px) * 0.5))
   );
 }
 
-/* Hard pixel shadows */
+/* Hard pixel shadows derived from --px */
 .pixel-shadow {
-  box-shadow: 4px 4px 0 #000000;
+  box-shadow: var(--px) var(--px) 0 #000000;
 }
 .pixel-shadow-sm {
-  box-shadow: 2px 2px 0 #000000;
+  box-shadow: calc(var(--px) * 0.6) calc(var(--px) * 0.6) 0 #000000;
 }
 .pixel-shadow-lg {
-  box-shadow: 6px 6px 0 #000000;
+  box-shadow: calc(var(--px) * 1.5) calc(var(--px) * 1.5) 0 #000000;
 }
 .pixel-shadow-mint {
-  box-shadow: 4px 4px 0 var(--px-mint);
+  box-shadow: var(--px) var(--px) 0 var(--px-mint);
 }
 .pixel-shadow-accent {
-  box-shadow: 4px 4px 0 var(--px-accent);
+  box-shadow: var(--px) var(--px) 0 var(--px-accent);
 }
 
 /* Stepped animations */
