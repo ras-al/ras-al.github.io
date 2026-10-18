@@ -80,8 +80,8 @@ export default function Projects() {
       className="relative border-b-4 border-[var(--px-line)]"
       style={{ height: `${PROJECTS.length * 85}vh` }}
     >
-      {/* Sticky Viewport Container - Perfectly fits viewport height without overflowing */}
-      <div className="sticky top-[96px] lg:top-0 h-[calc(100dvh-6.2rem)] lg:h-screen w-full flex flex-col justify-between py-2 sm:py-4 px-1 sm:px-2 overflow-hidden">
+      {/* Sticky Viewport Container - Mobile top-[86px] & Desktop top-0 100vh */}
+      <div className="sticky top-[86px] lg:top-0 h-[calc(100dvh-5.5rem)] lg:h-screen w-full flex flex-col justify-between py-2 sm:py-4 px-1 sm:px-2 overflow-hidden">
         {/* Streamlined Top Header & Interactive Cartridge Slot HUD */}
         <div className="flex-none pb-2 border-b-2 border-[var(--px-line)]">
           {/* Main Title Row */}

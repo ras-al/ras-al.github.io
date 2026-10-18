@@ -216,13 +216,12 @@ export default function Hero({ onNavigate, bootDone = true }) {
         </p>
 
         {/* CTA Buttons & Social Icons */}
-        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 mb-8 sm:mb-10">
+        <div className="flex flex-wrap items-center gap-4 mb-10">
           <PixelButton
             variant="mint"
             size="md"
             onClick={() => onNavigate('projects')}
             icon={<PixelSprite name="cartridge" scale={1.5} color="#0f0b1e" />}
-            className="w-full sm:w-auto justify-center text-center"
           >
             VIEW PROJECTS
           </PixelButton>
@@ -233,13 +232,12 @@ export default function Hero({ onNavigate, bootDone = true }) {
             href={PROFILE.links.resume}
             download="Rasal_Musthafa_Resume.pdf"
             icon={<PixelSprite name="download" scale={1.5} />}
-            className="w-full sm:w-auto justify-center text-center"
           >
             DOWNLOAD RESUME
           </PixelButton>
 
           {/* Social Icon Buttons */}
-          <div className="flex items-center justify-center gap-2 mt-1 sm:mt-0">
+          <div className="flex items-center gap-2">
             <PixelButton
               variant="secondary"
               size="md"
@@ -286,7 +284,7 @@ export default function Hero({ onNavigate, bootDone = true }) {
         </div>
 
         {/* Stat Tiles */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 select-none">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 select-none">
           <div className="p-3 bg-[var(--px-panel)] border-2 border-[var(--px-line)] pixel-corners-sm pixel-shadow-sm flex items-center gap-3">
             <PixelSprite name="star" scale={1.5} color="var(--px-gold)" />
             <div>

@@ -82,7 +82,7 @@ export default function App() {
 
     setActiveSection(sectionId);
 
-    const offset = window.innerWidth >= 1024 ? 24 : 105; // Desktop vs mobile header + directory bar height
+    const offset = window.innerWidth >= 1024 ? 24 : 92; // Desktop vs mobile sticky header offset
     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
     const offsetPosition = elementPosition - offset;
 
@@ -114,7 +114,7 @@ export default function App() {
       {/* Boot Screen Terminal Overlay */}
       {showBoot && <BootScreen onComplete={handleBootComplete} />}
 
-      {/* Navigation: Fixed Compact Floating Left Rail (Desktop) & Top Sticky Bar with Drawer (Mobile) */}
+      {/* Navigation: Desktop Left Rail & Mobile Top Window + Sticky Bar */}
       <Navigation
         activeSection={activeSection}
         onNavigate={handleNavigate}
@@ -122,8 +122,8 @@ export default function App() {
       />
 
       {/* Main Content Column */}
-      <div className="lg:pl-60">
-        <main id="main-content" className="max-w-5xl mx-auto px-3 sm:px-6 md:px-8 py-2 sm:py-4">
+      <div className="lg:pl-60 pl-0">
+        <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-2 sm:py-4">
           <Hero onNavigate={handleNavigate} bootDone={bootDone} />
           <About />
           <Experience />
