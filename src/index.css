@@ -189,13 +189,21 @@ img, canvas, svg {
 
 @keyframes robot-patrol {
   0% { transform: translateX(0) scaleX(1); }
-  49% { transform: translateX(calc(100vw - 120px)) scaleX(1); }
-  50% { transform: translateX(calc(100vw - 120px)) scaleX(-1); }
+  49% { transform: translateX(calc(100% - 90px)) scaleX(1); }
+  50% { transform: translateX(calc(100% - 90px)) scaleX(-1); }
   99% { transform: translateX(0) scaleX(-1); }
   100% { transform: translateX(0) scaleX(1); }
 }
 .animate-robot-walk {
   animation: robot-patrol 24s steps(60) infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

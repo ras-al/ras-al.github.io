@@ -81,7 +81,7 @@ export default function Projects() {
       style={{ height: `${PROJECTS.length * 85}vh` }}
     >
       {/* Sticky Viewport Container - Perfectly fits viewport height without overflowing */}
-      <div className="sticky top-14 lg:top-0 h-[calc(100dvh-3.5rem)] lg:h-screen w-full flex flex-col justify-between py-3 sm:py-4 px-1 sm:px-2 overflow-hidden">
+      <div className="sticky top-[96px] lg:top-0 h-[calc(100dvh-6.2rem)] lg:h-screen w-full flex flex-col justify-between py-2 sm:py-4 px-1 sm:px-2 overflow-hidden">
         {/* Streamlined Top Header & Interactive Cartridge Slot HUD */}
         <div className="flex-none pb-2 border-b-2 border-[var(--px-line)]">
           {/* Main Title Row */}
@@ -98,13 +98,13 @@ export default function Projects() {
 
             {/* ROM Buttons & Progress */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1 sm:gap-1.5">
                 {PROJECTS.map((_, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => scrollToProject(i)}
-                    className={`px-2 py-0.5 font-['Press_Start_2P'] text-[8px] sm:text-[9px] border-2 ${
+                    className={`px-1.5 sm:px-2 py-0.5 font-['Press_Start_2P'] text-[7px] sm:text-[9px] border-2 ${
                       activeIndex === i
                         ? 'border-[var(--px-mint)] bg-[var(--px-mint)] text-black font-bold'
                         : 'border-[var(--px-line)] bg-[var(--px-panel-2)] text-[var(--px-muted)] hover:border-[var(--px-mint)]'

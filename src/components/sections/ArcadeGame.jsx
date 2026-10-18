@@ -541,7 +541,7 @@ export default function ArcadeGame() {
             </div>
 
             {/* Mobile Touch Buttons */}
-            <div className="flex items-center gap-2 select-none">
+            <div className="flex items-center gap-2 select-none w-full sm:w-auto justify-center">
               <button
                 type="button"
                 onPointerDown={() => {
@@ -550,7 +550,7 @@ export default function ArcadeGame() {
                 onPointerUp={() => {
                   engineRef.current.keys.left = false;
                 }}
-                className="px-3 py-2 bg-[var(--px-panel)] border-2 border-[var(--px-line)] text-[var(--px-ink)] active:bg-[var(--px-mint)] active:text-black font-['Press_Start_2P'] text-xs cursor-pointer pixel-corners-sm"
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-[var(--px-panel)] border-2 border-[var(--px-line)] text-[var(--px-ink)] active:bg-[var(--px-mint)] active:text-black font-['Press_Start_2P'] text-xs cursor-pointer pixel-corners-sm text-center"
               >
                 ◀
               </button>
@@ -563,7 +563,7 @@ export default function ArcadeGame() {
                 onPointerUp={() => {
                   engineRef.current.keys.right = false;
                 }}
-                className="px-3 py-2 bg-[var(--px-panel)] border-2 border-[var(--px-line)] text-[var(--px-ink)] active:bg-[var(--px-mint)] active:text-black font-['Press_Start_2P'] text-xs cursor-pointer pixel-corners-sm"
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-[var(--px-panel)] border-2 border-[var(--px-line)] text-[var(--px-ink)] active:bg-[var(--px-mint)] active:text-black font-['Press_Start_2P'] text-xs cursor-pointer pixel-corners-sm text-center"
               >
                 ▶
               </button>
@@ -577,7 +577,7 @@ export default function ArcadeGame() {
                     startGame();
                   }
                 }}
-                className="px-4 py-2 bg-[var(--px-mint)] text-black border-2 border-[var(--px-line)] active:scale-95 font-['Press_Start_2P'] text-xs font-bold cursor-pointer pixel-corners-sm"
+                className="flex-1 sm:flex-none px-5 py-2.5 bg-[var(--px-mint)] text-black border-2 border-[var(--px-line)] active:scale-95 font-['Press_Start_2P'] text-xs font-bold cursor-pointer pixel-corners-sm text-center"
               >
                 FIRE
               </button>

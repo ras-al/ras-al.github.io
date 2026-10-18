@@ -53,10 +53,9 @@ export default function Research() {
                 </PixelChip>
               </div>
 
-              {/* Exact FaultyTerminal container requested by user */}
+              {/* Responsive CRT Terminal Chassis */}
               <div
-                style={{ width: '100%', height: '600px', position: 'relative' }}
-                className="overflow-hidden pixel-corners border-2 border-[var(--px-line)] bg-black shadow-inner"
+                className="w-full h-[320px] sm:h-[450px] lg:h-[600px] relative overflow-hidden pixel-corners border-2 border-[var(--px-line)] bg-black shadow-inner"
               >
                 <FaultyTerminal
                   tint="#A7EF9E"

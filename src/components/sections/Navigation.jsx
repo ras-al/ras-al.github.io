@@ -112,6 +112,32 @@ export default function Navigation({ activeSection, onNavigate, onReplayIntro })
         </PixelButton>
       </header>
 
+      {/* Mobile Sub-Header Directory Bar: Horizontally scrollable, always open & visible */}
+      <nav
+        aria-label="Mobile Directory Navigation"
+        className="lg:hidden sticky top-[57px] z-30 bg-[var(--px-bg)]/95 border-b-2 border-[var(--px-line)] px-2 py-1.5 flex items-center gap-1.5 overflow-x-auto select-none no-scrollbar"
+      >
+        {menuItems
+          .flatMap(cat => (cat.children ? cat.children : [cat]))
+          .map(item => {
+            const isActive = activeSection === item.value;
+            return (
+              <button
+                key={item.value}
+                type="button"
+                onClick={() => handleSelect(item.value)}
+                className={`flex items-center gap-1.5 px-2.5 py-1 text-[9px] font-['Press_Start_2P'] border whitespace-nowrap cursor-pointer transition-none ${
+                  isActive
+                    ? 'bg-[var(--px-mint)] text-black border-[var(--px-mint)] font-bold'
+                    : 'bg-[var(--px-panel)] text-[var(--px-muted)] border-[var(--px-line)] hover:text-[var(--px-ink)] hover:border-[var(--px-mint)]'
+                } pixel-corners-sm`}
+              >
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+      </nav>
+
       {/* Mobile Drawer Overlay */}
       {mobileOpen && (
         <div
@@ -142,6 +168,8 @@ export default function Navigation({ activeSection, onNavigate, onReplayIntro })
               <BranchedMenu
                 items={menuItems}
                 active={activeSection}
+                defaultOpen={[0, 1, 2, 3]}
+                alwaysOpen={true}
                 onSelect={handleSelect}
                 color="#f4efe6"
                 accentColor="#5cffc8"
@@ -211,6 +239,8 @@ export default function Navigation({ activeSection, onNavigate, onReplayIntro })
             <BranchedMenu
               items={menuItems}
               active={activeSection}
+              defaultOpen={[0, 1, 2, 3]}
+              alwaysOpen={true}
               onSelect={handleSelect}
               color="#f4efe6"
               accentColor="#5cffc8"

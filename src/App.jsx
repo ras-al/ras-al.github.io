@@ -82,7 +82,7 @@ export default function App() {
 
     setActiveSection(sectionId);
 
-    const offset = window.innerWidth >= 1024 ? 24 : 72; // Desktop vs mobile header height
+    const offset = window.innerWidth >= 1024 ? 24 : 105; // Desktop vs mobile header + directory bar height
     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
     const offsetPosition = elementPosition - offset;
 
@@ -123,7 +123,7 @@ export default function App() {
 
       {/* Main Content Column */}
       <div className="lg:pl-60">
-        <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-8 py-4">
+        <main id="main-content" className="max-w-5xl mx-auto px-3 sm:px-6 md:px-8 py-2 sm:py-4">
           <Hero onNavigate={handleNavigate} bootDone={bootDone} />
           <About />
           <Experience />

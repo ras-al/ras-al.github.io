@@ -41,6 +41,7 @@ const toSet = open => new Set(Array.isArray(open) ? open : open >= 0 ? [open] : 
 export default function BranchedMenu({
   items = DEFAULT_ITEMS,
   defaultOpen = 0,
+  alwaysOpen = false,
   defaultActive = '',
   // ADAPTED: add optional controlled active prop
   active: controlledActive,
@@ -60,7 +61,7 @@ export default function BranchedMenu({
   foldDuration = 300,
   className = ''
 }) {
-  const [open, setOpen] = useState(() => toSet(defaultOpen));
+  const [open, setOpen] = useState(() => (alwaysOpen ? new Set(items.map((_, i) => i)) : toSet(defaultOpen)));
   const [uncontrolledActive, setUncontrolledActive] = useState(() => {
     if (defaultActive) return defaultActive;
     const first = items.find((it, i) => it.children && toSet(defaultOpen).has(i));
@@ -72,6 +73,10 @@ export default function BranchedMenu({
 
   // ADAPTED: sync open sections to the active item's parent through an effect when active changes
   useEffect(() => {
+    if (alwaysOpen) {
+      setOpen(new Set(items.map((_, i) => i)));
+      return;
+    }
     if (!active) return;
     const parentIndex = items.findIndex(it =>
       it.children ? it.children.some(kid => kid.value === active) : it.value === active
@@ -84,7 +89,7 @@ export default function BranchedMenu({
         return next;
       });
     }
-  }, [active, items]);
+  }, [active, items, alwaysOpen]);
   const navRef = useRef(null);
   const heads = useRef([]);
   const markerRef = useRef(null);

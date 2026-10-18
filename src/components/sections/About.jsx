@@ -187,7 +187,7 @@ function PixelCatNpc() {
   };
 
   return (
-    <div className="relative mt-5 p-3 bg-[var(--px-panel-2)] border-2 border-[var(--px-line)] pixel-corners-sm flex items-center justify-between select-none">
+    <div className="relative mt-5 p-3 bg-[var(--px-panel-2)] border-2 border-[var(--px-line)] pixel-corners-sm flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 select-none">
       <div className="flex items-center gap-3">
         <button
           type="button"

@@ -79,7 +79,7 @@ export default function Experience() {
       style={{ height: `${EXPERIENCE.length * 75}vh` }}
     >
       {/* Sticky Viewport Container - Perfectly fits viewport height without overflowing */}
-      <div className="sticky top-14 lg:top-0 h-[calc(100dvh-3.5rem)] lg:h-screen w-full flex flex-col justify-between py-3 sm:py-4 px-1 sm:px-2 overflow-hidden">
+      <div className="sticky top-[96px] lg:top-0 h-[calc(100dvh-6.2rem)] lg:h-screen w-full flex flex-col justify-between py-2 sm:py-4 px-1 sm:px-2 overflow-hidden">
         {/* Streamlined Top Header & Interactive Quest HUD */}
         <div className="flex-none pb-2 border-b-2 border-[var(--px-line)]">
           {/* Main Title Row */}
@@ -96,13 +96,13 @@ export default function Experience() {
 
             {/* Jump Dots & Progress */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 {EXPERIENCE.map((exp, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => scrollToQuest(i)}
-                    className={`w-3 h-3 sm:w-3.5 sm:h-3.5 border-2 ${
+                    className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 ${
                       activeIndex === i
                         ? 'border-[var(--px-gold)] bg-[var(--px-gold)]'
                         : exp.featured

@@ -10,13 +10,13 @@ export default function EducationCertifications() {
   const certItems = CERTIFICATIONS.map((cert) => ({
     ...cert,
     node: (
-      <div className="w-full max-w-[380px] mx-auto p-3 sm:p-4 bg-[var(--px-panel-2)] border-2 border-[var(--px-line)] pixel-corners-sm pixel-shadow-sm flex items-center gap-3.5 select-none">
-        <PixelSprite name="cartridge" scale={2} color="var(--px-mint)" className="flex-none" />
+      <div className="w-full max-w-[380px] mx-auto p-2.5 sm:p-4 bg-[var(--px-panel-2)] border-2 border-[var(--px-line)] pixel-corners-sm pixel-shadow-sm flex items-center gap-2.5 sm:gap-3.5 select-none">
+        <PixelSprite name="cartridge" scale={1.6} color="var(--px-mint)" className="flex-none" />
         <div className="flex-1 min-w-0">
-          <h4 className="font-['Silkscreen'] text-xs sm:text-[13px] font-bold text-[var(--px-ink)] leading-snug">
+          <h4 className="font-['Silkscreen'] text-[11px] sm:text-[13px] font-bold text-[var(--px-ink)] leading-snug">
             {cert.title}
           </h4>
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1.5 font-['Press_Start_2P'] text-[9px]">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 font-['Press_Start_2P'] text-[8px] sm:text-[9px]">
             <span className="text-[var(--px-gold)]">{cert.issuer}</span>
             <span className="text-[var(--px-muted)]">•</span>
             <span className="text-[var(--px-mint)]">{cert.date}</span>

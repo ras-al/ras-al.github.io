@@ -10,26 +10,26 @@ export default function SectionHeader({
   className = '',
 }) {
   return (
-    <div className={`mb-10 select-none ${className}`}>
+    <div className={`mb-6 sm:mb-10 select-none ${className}`}>
       {/* Level Tag & Sprite */}
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
         {spriteNode ? (
           spriteNode
         ) : (
-          <PixelSprite name={sprite} scale={2} />
+          <PixelSprite name={sprite} scale={1.6} />
         )}
-        <span className="font-['Press_Start_2P'] text-[11px] md:text-xs text-[var(--px-mint)] tracking-wider uppercase font-bold">
+        <span className="font-['Press_Start_2P'] text-[10px] sm:text-[11px] md:text-xs text-[var(--px-mint)] tracking-wider uppercase font-bold">
           [ {level} ]
         </span>
       </div>
 
       {/* Main Title */}
-      <h2 className="font-['Press_Start_2P'] text-xl sm:text-2xl md:text-3xl text-[var(--px-ink)] leading-snug tracking-tight uppercase">
+      <h2 className="font-['Press_Start_2P'] text-base sm:text-xl md:text-2xl lg:text-3xl text-[var(--px-ink)] leading-snug tracking-tight uppercase">
         {title}
       </h2>
 
       {subtitle && (
-        <p className="font-['Silkscreen'] text-xs sm:text-sm text-[var(--px-muted)] mt-2 max-w-2xl">
+        <p className="font-['Silkscreen'] text-[11px] sm:text-xs md:text-sm text-[var(--px-muted)] mt-1.5 sm:mt-2 max-w-2xl leading-relaxed">
           {subtitle}
         </p>
       )}
