@@ -789,6 +789,7 @@ export default function FaultyTerminal({
     };
 
     const onPointerMove = event => {
+      if (!visible) return;
       const { x, y, inside } = locate(event);
       const was = pointer.inside;
       pointer.inside = inside;
@@ -800,6 +801,7 @@ export default function FaultyTerminal({
     };
 
     const onPointerDown = event => {
+      if (!visible) return;
       const s = settingsRef.current;
       const { x, y, inside } = locate(event);
       if (!inside || reduce || !s.clickEffect) return;

@@ -9,7 +9,8 @@ export default function Experience() {
   const trackRef = useRef(null);
   const [scrollRange, setScrollRange] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const progressFillRef = useRef(null);
+  const progressTextRef = useRef(null);
 
   // Measure dynamic scroll distance based on track width vs viewport width
   useEffect(() => {
@@ -42,10 +43,16 @@ export default function Experience() {
 
   useEffect(() => {
     return scrollYProgress.on('change', latest => {
-      setProgress(latest);
+      const pct = Math.round(latest * 100);
+      if (progressFillRef.current) {
+        progressFillRef.current.style.width = `${pct}%`;
+      }
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = `${pct}%`;
+      }
       const count = EXPERIENCE.length;
       const idx = Math.min(count - 1, Math.max(0, Math.floor(latest * count)));
-      setActiveIndex(idx);
+      setActiveIndex(prev => (prev !== idx ? idx : prev));
     });
   }, [scrollYProgress]);
 
@@ -111,12 +118,13 @@ export default function Experience() {
               <div className="hidden sm:flex items-center gap-1.5 font-['Silkscreen'] text-[10px] text-[var(--px-muted)]">
                 <div className="w-20 sm:w-24 h-2.5 bg-[var(--px-bg)] border border-[var(--px-line)] p-0.5">
                   <div
+                    ref={progressFillRef}
                     className="h-full bg-[var(--px-mint)]"
-                    style={{ width: `${Math.round(progress * 100)}%` }}
+                    style={{ width: '0%' }}
                   />
                 </div>
-                <span className="text-[var(--px-mint)] w-7 text-right">
-                  {Math.round(progress * 100)}%
+                <span ref={progressTextRef} className="text-[var(--px-mint)] w-7 text-right">
+                  0%
                 </span>
               </div>
             </div>
@@ -145,7 +153,7 @@ export default function Experience() {
 
           <motion.div
             ref={trackRef}
-            style={{ x }}
+            style={{ x, willChange: 'transform' }}
             className="flex flex-row items-stretch gap-4 sm:gap-6 md:gap-8 z-10 pl-1 pr-8 sm:pr-16 h-full max-h-[calc(100vh-170px)] sm:max-h-[calc(100vh-180px)] py-1"
           >
             {EXPERIENCE.map((exp, index) => {
@@ -184,7 +192,7 @@ export default function Experience() {
                     variant={isFeatured ? 'raised' : 'panel'}
                     goldBorder={isFeatured}
                     tag={isFeatured ? 'FEATURED QUEST' : null}
-                    className={`flex-1 min-h-0 flex flex-col justify-between bg-[var(--px-bg)]/95 backdrop-blur-sm ${
+                    className={`flex-1 min-h-0 flex flex-col justify-between bg-[var(--px-bg)] ${
                       isActive ? 'border-[var(--px-mint)] shadow-[0_0_12px_rgba(92,255,200,0.2)]' : ''
                     }`}
                     bodyClassName="p-3 sm:p-4 md:p-5 flex flex-col justify-between h-full min-h-0"

@@ -72,7 +72,7 @@ export default function Hero({ onNavigate, bootDone = true }) {
   useEffect(() => {
     if (!containerRef.current) return;
     const observer = new IntersectionObserver(([entry]) => {
-      setIsHeroVisible(entry.isIntersecting);
+      setIsHeroVisible(prev => (prev !== entry.isIntersecting ? entry.isIntersecting : prev));
     });
     observer.observe(containerRef.current);
     return () => observer.disconnect();

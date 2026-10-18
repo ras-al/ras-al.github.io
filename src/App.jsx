@@ -61,8 +61,8 @@ export default function App() {
         const visibleEntries = entries.filter(entry => entry.isIntersecting);
         if (visibleEntries.length > 0) {
           // Sort by top offset to choose the primary active section
-          visibleEntries.sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
-          setActiveSection(visibleEntries[0].target.id);
+          const nextSection = visibleEntries[0].target.id;
+          setActiveSection(prev => (prev !== nextSection ? nextSection : prev));
         }
       },
       {

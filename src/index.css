@@ -86,6 +86,9 @@ img, canvas, svg {
   );
   background-size: 100% 4px;
   opacity: 0.85;
+  transform: translateZ(0);
+  will-change: transform;
+  contain: strict;
 }
 
 @media (prefers-reduced-motion: reduce) {

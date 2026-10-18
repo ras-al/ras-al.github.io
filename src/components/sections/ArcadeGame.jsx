@@ -16,6 +16,8 @@ const BUG_TYPES = [
 
 export default function ArcadeGame() {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [gameState, setGameState] = useState('idle'); // 'idle' | 'playing' | 'gameover'
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
@@ -28,6 +30,18 @@ export default function ArcadeGame() {
   const [lives, setLives] = useState(3);
   const [wave, setWave] = useState(1);
   const [soundMuted, setSoundMuted] = useState(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { rootMargin: '100px' }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // Mutable game state held in ref for 60fps RAF loop
   const engineRef = useRef({
@@ -165,7 +179,7 @@ export default function ArcadeGame() {
   // Main 60 FPS Game Loop
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !isVisible) return;
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
 
@@ -404,10 +418,10 @@ export default function ArcadeGame() {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, highScore, fireLaser]);
+  }, [gameState, highScore, fireLaser, isVisible]);
 
   return (
-    <section id="arcade" className="py-20 border-b-4 border-[var(--px-line)]">
+    <section id="arcade" ref={containerRef} className="py-20 border-b-4 border-[var(--px-line)]">
       <SectionHeader
         level="BONUS STAGE"
         title="PIXEL BUG HUNTER"
